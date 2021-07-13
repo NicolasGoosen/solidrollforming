@@ -15,8 +15,68 @@
     -webkit-font-smoothing: antialiased; }*/
 
 
-/* Mobile Hamburger Pop-Out Menu
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+
+/* Responsive Grid
+––––––––––––––––––––––––––––––––––––––––––––––––––
+Max width of content is 1000px.
+
+1162px * 86% = 999.32
+1163px * 86% = 1000.17
+*/
+
+:root { --grid-padding: 7vw; }
+@media ( min-width: 1163px ) {
+    :root { --grid-padding: calc( (100vw - 1000px) / 2 ); }
+}
+
+section.fullwidth {
+    position: relative;
+    padding-left: var(--grid-padding);
+    padding-right: var(--grid-padding);
+}
+
+/* If I had to stick to a 'grid' I'd have 4 columns, with 20px gutter 
+
+   at 1000px wide, three columns would be:
+   ((1000px - 3 x gutter) / 4 * 3 + 2 * gutter) pixels wide 
+   = 940 / 4 * 3 + 40 = 235 * 3 + 40 = 745px
+   866px * 86% = 744.76
+   867px * 86% = 745.62
+
+   at 1000px wide, two columns would be:
+   ((1000px - 3 x gutter) / 4 * 2 + 1 * gutter) pixels wide 
+   = 940 / 4 * 2 + 40 = 235 * 2 + 20 = 490px
+   569px * 86% = 489.34
+   570px * 86% = 490.20
+
+   */
+   /*
+:root {
+    --three-columns-padding: 7vw;
+    --two-columns-padding:   7vw;
+}
+
+@media ( min-width: 867px ) {
+    :root { --three-columns-padding: calc( (100vw - 745px) / 2 ); }
+}
+section.three-column-width {
+    position: relative;
+    padding-left:  var( --three-columns-padding );
+    padding-right: var( --three-columns-padding );
+}
+@media ( min-width: 570px ) {
+    :root { --two-columns-padding: calc( (100vw - 490px) / 2 ); }
+}
+section.two-column-width {
+    position: relative;
+    padding-left:  var( --two-columns-padding );
+    padding-right: var( --two-columns-padding );
+}
+*/
+
+
 
 
 /* Navbar
@@ -28,6 +88,7 @@ nav {
     justify-content: space-around;
     align-items: center;
     flex-flow: row nowrap;
+    z-index: 100;
 
     background: hsl(0, 0%, 22%);
     height: 90px;
@@ -38,24 +99,25 @@ nav {
 }
 nav.height-smaller { height: 68px; }
 
-
-.nav-logo * { display: block; } /* avoid line-height issue */
-.nav-logo svg {
+#navLogo * { display: block; } /* avoid line-height issue */
+#navLogo svg {
     width: auto;
     height: 50px;
 }
 
-.nav-phone { display: none; }
-.nav-phone * { display: block; } /* avoid line-height issue */
-.nav-phone svg {
+#navLocation { display: none; }
+#navLocation * { display: block; } /* avoid line-height issue */
+#navLocation svg {
     width: auto;
-    height: 38px;
+    height: 35px;
 }
 
-/* iphone 6 */
-@media (min-width: 375px) {
-    nav { justify-content: space-evenly; }
-    .nav-phone { display: block; }
+#navPhone { display: none; }
+#navPhone > div { display: none; }
+#navPhone * { display: block; } /* avoid line-height issue */
+#navPhone svg {
+    width: auto;
+    height: 38px;
 }
 
 
@@ -91,7 +153,7 @@ nav.height-smaller { height: 68px; }
     border-radius: 3px;
     z-index: 1;
     transform-origin: 5px 0px;
-    transition: all 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, background 0.5s ease-in-out;
 }
 #menuToggle span:nth-child(4) { margin: 0; }
 
@@ -125,5 +187,368 @@ nav.height-smaller { height: 68px; }
   padding: 10px 0;
   transition-delay: 2s;
 }
+
+
+/* Responsive Nav Menu
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* iphone 6 */
+@media (min-width: 375px) {
+    nav { justify-content: space-evenly; }
+    #navPhone { display: block; }
+}
+
+/* iphone 6+ */
+@media (min-width: 414px) {
+    nav { justify-content: space-evenly; }
+    #navPhone { display: block; }
+}
+
+/* ipad */
+@media (min-width: 768px) {
+    nav {
+        flex-flow: row wrap;    
+        justify-content: space-between;    
+        height: initial;
+        position: relative;
+
+        padding-top: 25px;
+        padding-bottom: 0;
+        padding-left: var(--grid-padding);
+        padding-right: var(--grid-padding);
+    }
+    #navLogo svg { height: 62px; }
+
+    #navLogo     { order: 1; }
+    #navLocation { order: 2; }
+    #navPhone    { order: 3; }
+    #menuToggle  { order: 4; }
+
+    #menuToggle input { display: none; }
+    #menuToggle span { display: none; }
+    #menuToggle {
+        width: 100%;
+        height: initial;
+        margin-top: 5px;
+        transform: translate(0, 40%);
+    }
+    #menu {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-flow: row nowrap;
+
+        background: hsl(0, 0%, 95%);
+        position: relative;
+        height: initial;
+        width: 100%;
+        padding: 0;
+        transform: initial;
+    }
+    #menu li {
+        padding: 0;
+    }
+    #menu li * {
+        display: block;
+    }
+
+    #menu li a,
+    #menu li a:link,
+    #menu li a:visited {
+        font-family: 'Montserrat', sans-serif;
+        font-size: calc( (13 / 16) * 1rem ); 
+        font-style: normal;
+        font-weight: 600; /* semi-bold */
+        letter-spacing: 0.000em;  /* adobe xd's unit is 1/1000em */
+        line-height: 1; 
+        color: hsl(0, 0%, 37%);
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+        text-transform: uppercase;
+        padding: 1.2em 0.5em;
+    }
+
+    #menu li a:hover {
+        color: hsl(0, 0%, 0%);
+    }
+    #menu li a:active {
+        color: hsl(0, 0%, 27%);
+    }
+
+    /* icons in top of navbar */
+
+    #navLocation { display: block; }
+    #navLocation > a {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    #navLocation a div * { display: initial; }
+    #navLocation a svg { margin-right: calc( (12 / 16) * 1rem ); }
+
+    #navPhone {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    #navPhone > div { display: block; }
+    #navPhone > div * { display: initial; }
+    #navPhone > a { margin-right: calc( (12 / 16) * 1rem ); }
+
+    #navLocation a,
+    #navLocation a:link,
+    #navLocation a:visited,
+    #navPhone a,
+    #navPhone a:link,
+    #navPhone a:visited {
+        font-family: 'Montserrat', sans-serif;
+        font-size: calc( (13 / 16) * 1rem ); 
+        font-style: normal;
+        font-weight: 500; /* medium */
+        letter-spacing: 0.000em;  /* adobe xd's unit is 1/1000em */
+        line-height: calc( (18 / 16) * 1rem ); 
+        color: hsl(0, 0%, 60%);
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+    }
+    #navLocation a:hover,
+    #navPhone a:hover {
+        color: hsl(0, 0%, 80%);
+    }
+    #navLocation a:active,
+    #navPhone a:active {
+        color: hsl(0, 0%, 60%);
+    }
+    #navLocation a strong,
+    #navPhone a strong {
+        font-weight: 700; /* bold */
+        color: hsl(0, 0%, 70%);
+    }
+    #navLocation a:hover strong,
+    #navPhone a:hover strong {
+        color: hsl(0, 0%, 90%);
+    }
+    #navLocation a:active strong,
+    #navPhone a:active strong {
+        color: hsl(0, 0%, 70%);
+    }
+}
+
+
+
+/* Typography
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+main {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: calc( (16 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 400; /* regular */
+    letter-spacing: 0.000em;  /* adobe xd's unit is 1/1000em */
+    line-height: calc( (22 / 16) * 1rem ); 
+    color: hsl(0, 0%, 30%);
+}
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: calc( (25 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 700; /* bold */
+    letter-spacing: -0.010em;  /* adobe xd's unit is 1/1000em */
+    line-height: calc( (28 / 16) * 1rem ); 
+    color: hsl(0, 0%, 30%);
+    text-transform: uppercase;
+}
+h2.light {
+    color: hsl(0, 0%, 90%);
+}
+p.light {
+    color: hsl(0, 0%, 75%);
+}
+
+/* Typography Decorations
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.text-center {
+    text-align: center;
+}
+h2.decorline {
+    position: relative;
+}
+h2.decorline:after {
+    content: "";
+    display: block;
+    position: relative;
+    background: rgb(255, 212, 59);
+    height: 3px;
+    width: 90px;
+    left: 0;
+    margin-top: 14px;
+    margin-bottom: 17px;
+}
+h2.text-center.decorline:after {
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+h3.decorline {
+    position: relative;
+}
+h3.decorline:after {
+    content: "";
+    display: block;
+    position: relative;
+    background: hsl(0, 0%, 20%);
+    height: 3px;
+    width: 90px;
+    left: 0;
+    margin-top: 14px;
+    margin-bottom: 16px;
+}
+h3.text-center.decorline:after {
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+/* Carousels
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.three-cards-grid {
+    --gap: 18px;
+}
+.three-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap) var(--gap);
+    justify-items: stretch;
+    align-items: stretch;
+    width: 100%;
+    justify-content: stretch;
+    align-content: start;
+}
+p + .three-cards-grid { margin-top: 25px }
+
+@media (min-width: 550px) {
+    .three-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .three-cards-grid > div:last-child {
+        transform: translate(calc(var(--gap) / 2 + 50%),0);
+    }
+}
+
+/* ipad */
+@media (min-width: 768px) {
+    .three-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .three-cards-grid > div:last-child {
+        transform: none;
+    }
+}
+
+.card {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.16);
+}
+.card > img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+.card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: calc( (22 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 700; /* bold */
+    letter-spacing: -0.010em;  /* adobe xd's unit is 1/1000em */
+    line-height: calc( (24 / 16) * 1rem ); 
+    color: hsl(0, 0%, 30%);
+    margin-bottom: 6px;
+}
+.card > div {
+    padding: 20px;
+}
+.card > a,
+.card > a:link 
+.card > a:visited {
+    margin-top: auto;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    padding: 0.5em 1.5em;
+    border: 2px solid #FDD63B;
+    border-radius: 0.8em;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: calc( (13 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 600; /* semi-bold */
+    letter-spacing: -0.030em;  /* adobe xd's unit is 1/1000em */
+    color: hsl(0, 0%, 30%);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+/* Our Latest Projects Section
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+#latest-projects {
+    padding-top: 23px;
+    margin-top:  60px;
+    background-color: hsl(0, 0%, 22%);
+}
+
+#latest-projects svg {
+    width: auto;
+    height: 50px;
+    display: block;
+    margin: 0 auto 14px;
+}
+
+#projects-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 0;
+    justify-items: stretch;
+    align-items: stretch;
+    width: 100%;
+    justify-content: stretch;
+    align-content: start;
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.project-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: calc( (19 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 800; /* extra-bold */
+    letter-spacing: 0.000em;  /* adobe xd's unit is 1/1000em */
+    line-height: calc( (21 / 16) * 1rem ); 
+    color: hsl(0, 0%, 20%);
+}
+.project-card p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: calc( (16 / 16) * 1rem ); 
+    font-style: normal;
+    font-weight: 400; /* extra-bold */
+    letter-spacing: 0.000em;  /* adobe xd's unit is 1/1000em */
+    line-height: calc( (22 / 16) * 1rem ); 
+    color: hsl(0, 0%, 20%);
+}
+
+/* Utilities
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.pb-30 {
+    padding-bottom: 30px;
+}
+
+
 
 
